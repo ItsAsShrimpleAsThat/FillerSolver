@@ -1,0 +1,104 @@
+body
+{
+    background-color: #333339;
+}
+
+.bigtitle
+{
+    color: rgb(212, 212, 212);
+    font-family: "Roboto", sans-serif;
+    margin-top: auto;
+    position:relative;
+    margin-left: 1%;
+    font-size: xx-large;
+}
+
+.topbar
+{
+    width:            100%;
+    height:           30pt;
+    background:       rgb(7, 4, 32);
+    margin-top:       0.5%;
+    padding:          0px;
+}
+
+.colorinput
+{
+    border: 3px rgb(35, 2, 50) solid;
+    width: 384pt;
+    height: 300pt;
+}
+
+.smalltext
+{
+    color: rgb(212, 212, 212);
+    font-family: "Roboto", sans-serif;
+    margin-top: 1pt;
+    margin-bottom: 1pt;
+    font-size: x-large;
+}
+
+.colorinputflex
+{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1%;
+    margin-left: 1%;
+}
+
+.colorinputmenuflex
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.smallertext
+{
+    color: rgb(212, 212, 212);
+    font-family: "Roboto", sans-serif;
+    margin-top: 1pt;
+    margin-bottom: 1pt;
+    font-size: large;
+}
+
+.gobutton
+{
+    height: 30pt;
+    width: 50pt;
+}
+
+#depthinput
+{
+    width: 50pt;
+    height: 30pt;
+    background-color: #45455d;
+    color: antiquewhite;
+    border: 1px solid;
+    border-color: black;
+    border-radius: 10pt;
+    font-size: large;
+    text-indent: 7pt;
+}
+
+.settingsmenuflex
+{
+    display: flex;
+    margin-top: 40pt;
+    margin-left: 10pt;
+}
+
+.settingsheaderflex
+{
+
+}
+
+.settingslayer1flex
+{
+    
+}
+
+.inputlabel
+{
+    margin-top: 7pt;
+    margin-right: 2pt;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Filler Solver</title>
+        <meta name = "description" content = "Solves your game of GamePigeon Filler"> 
+        <link rel="stylesheet" href="style.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class = "topbar">
+            <p class="bigtitle">GamePigeon Filler Solver</p>
+        </div>
+
+        <div class="colorinputmenuflex">
+            <div class="colorinputflex">
+                <p class="smalltext">Enter your current game state:</p>
+                <canvas id="colorcanvas" class = "colorinput"></canvas>
+                <script src="solver.js"></script>
+            </div>
+
+            <div class="settingsmenuflex">
+                <p>Search Settings</p>
+                
+                <label for="depthinput" class="smallertext inputlabel">Depth:</label>
+                <input type="text" value="20" id="depthinput" name="depthinput">
+                <button class="gobutton"></button>
+            </div>
+        </div>
+    </body>
+</html>
