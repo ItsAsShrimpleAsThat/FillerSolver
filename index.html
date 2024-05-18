@@ -18,16 +18,43 @@
             <div class="colorinputflex">
                 <p class="smalltext">Enter your current game state:</p>
                 <canvas id="colorcanvas" class = "colorinput"></canvas>
-                <script src="solver.js"></script>
             </div>
 
             <div class="settingsmenuflex">
-                <p>Search Settings</p>
+                <div class="smalltext settingsheader">
+                    <p id="searchsettingsheader">Search Settings</p>
+                </div>
                 
-                <label for="depthinput" class="smallertext inputlabel">Depth:</label>
-                <input type="text" value="20" id="depthinput" name="depthinput">
-                <button class="gobutton"></button>
+                <div class="settingslayer" id="layer1">
+                    <div class="settingslayer1left">
+                        <label for="depthinput" class="smallertext inputlabel">Search Depth:</label>
+                        <input type="text" value="20" class="inputfield" id="depthinput" name="depthinput">
+                    </div>
+
+                    <div class="settingslayer1right">
+                        <label for="infinitedepth" class="smallertext inputlabel">Infinite Depth:</label>
+                        <input type="checkbox" class="l1checkbox" name="infinitedepth" id="infinitedepth">
+                    </div>
+                </div>
+
+                <div class="settingslayer" id="layer2">
+                    <div class="settingslayer1left">
+                        <p class="smallertext currentturn">Current Turn:</p>
+                        <label for="mebox" class="smallertext inputlabel" id="melabel">Me:</label>
+                        <input type="checkbox" class="checkbox" name="mebox" id="mebox" checked />
+                        
+                        <label for="opponentbox" class="smallertext inputlabel" id="opponentlabel">Opponent:</label>
+                        <input type="checkbox" class="checkbox" name="opponentbox" id="opponentbox">
+                    </div>
+                </div>
+                
+                <div class="settingslayer" id="layer3">
+                    <button class="gobutton inputfield" id="gobutton">Start!</button>
+                    <button class="gobutton inputfield" id="stopbutton" disabled>Stop</button>
+                </div>
             </div>
         </div>
+
+        <script src="solver.js"></script>
     </body>
 </html>

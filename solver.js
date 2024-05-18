@@ -37,6 +37,13 @@ let currentGame = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0,
 let boxes = [];
 let previousSelectedBox = -1;
 
+const myTurnCheckbox = document.getElementById("mebox");
+const oppTurnCheckbox = document.getElementById("opponentbox");
+const depthInputField = document.getElementById("depthinput");
+const infiniteDepthSelector = document.getElementById("infinitedepth");
+const goButton = document.getElementById("gobutton");
+const stopButton = document.getElementById("stopbutton");
+
 for(let x = 0; x < 8; x++)
 {
     for(let y = 0; y < 7; y++)
@@ -86,6 +93,14 @@ function screenCoord2gridCoord(mx, my)
     }
 }
 
+function startSearch()
+{
+    goButton.disabled = true;
+    stopButton.disabled = false;
+    
+    
+}
+
 function clickEvent(canvas, event) {
     const rect = canvas.getBoundingClientRect()
     let x = (event.clientX - rect.left) * clickX2canvasX;
@@ -123,13 +138,30 @@ function clickEvent(canvas, event) {
         {
             let gridCoord = screenCoord2gridCoord(x, y);
 
-            ctx.fillStyle = colors[selectedColor];
-            ctx.fillRect(leftOffset + (gridCoord[0] * squareSize), gridCoord[1] * squareSize + topMargin, squareSize,  squareSize);  
-            currentGame[gridCoord[0], gridCoord[1]] = selectedColor;
+            if(gridCoord != null)
+            {
+                ctx.fillStyle = colors[selectedColor];
+                ctx.fillRect(leftOffset + (gridCoord[0] * squareSize), gridCoord[1] * squareSize + topMargin, squareSize,  squareSize);  
+                currentGame[gridCoord[0], gridCoord[1]] = selectedColor;
+            }
         }
     }
 }
 
 canvas.addEventListener('mousedown', function(e) {
     clickEvent(canvas, e);
-})
+});
+
+goButton.addEventListener("click", startSearch);
+
+myTurnCheckbox.addEventListener("change", function(){
+    oppTurnCheckbox.checked = !myTurnCheckbox.checked;
+});
+
+oppTurnCheckbox.addEventListener("change", function(){
+    myTurnCheckbox.checked = !oppTurnCheckbox.checked;
+});
+
+infiniteDepthSelector.addEventListener("change", function(){
+    depthInputField.disabled = infiniteDepthSelector.checked; 
+});

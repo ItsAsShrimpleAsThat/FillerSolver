@@ -61,44 +61,135 @@ body
     font-size: large;
 }
 
+.inputfield
+{
+    background-color: #38384d;
+    color: #faebd7;
+    border: 2px solid;
+    border-color: rgb(4, 3, 30);
+    border-radius: 10pt;
+    font-size: large;
+}
+
+.gobutton:hover
+{
+    background-color: #5a5a75;
+    transition: 0.05;
+}
+
+
+.inputfield:disabled
+{
+    background-color: #1d1d33;
+    color: #656059;
+    transition: 0.05s;
+}
+
 .gobutton
 {
     height: 30pt;
-    width: 50pt;
+    width: 60pt;
 }
 
 #depthinput
 {
     width: 50pt;
     height: 30pt;
-    background-color: #45455d;
-    color: antiquewhite;
-    border: 1px solid;
-    border-color: black;
-    border-radius: 10pt;
-    font-size: large;
     text-indent: 7pt;
 }
 
 .settingsmenuflex
 {
     display: flex;
-    margin-top: 40pt;
+    margin-top: 25pt;
     margin-left: 10pt;
+    flex-direction: column;
+    width: 300pt;
 }
 
-.settingsheaderflex
+.settingsheader
 {
-
+    margin-top: 0pt;
+    text-align: center;
 }
 
-.settingslayer1flex
+.settingslayer
 {
-    
+    display:flex;
+    flex-direction: row;
+} 
+
+.settingslayer1left
+{
+    display: flex;
+    margin-left: 0pt;
+}
+
+.settingslayer1right
+{
+    display: flex;
+    justify-content: right;
+    margin-right: 0pt;
+    margin-left: auto;
+}
+
+.checkbox
+{
+    color: #303043;
+    margin-top: 10pt;
+}
+
+.l1checkbox
+{
+    margin-top: 4pt;
 }
 
 .inputlabel
 {
-    margin-top: 7pt;
-    margin-right: 2pt;
+    margin-top: 10pt;
+    margin-right: 5pt;
+}
+
+.currentturn
+{
+    font-size: 16pt;
+    margin-top: 8pt;
+    margin-right: 9pt;
+}
+
+#opponentlabel
+{
+    margin-left: 30pt;
+}
+
+#melabel
+{
+    margin-left: 15pt;
+}
+
+#searchsettingsheader
+{
+    text-decoration: underline;
+    text-decoration-thickness: 1pt;
+}
+
+#layer1
+{
+    margin-top:-5pt;
+}
+
+#layer2
+{
+    margin-top:10pt;
+}
+
+#layer3
+{
+    margin-top:25pt;
+    justify-content: center;
+}
+
+#gobutton
+{
+    margin-right: 15pt;
 }
