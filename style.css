@@ -105,12 +105,12 @@ body
     margin-left: 10pt;
     flex-direction: column;
     width: 325pt;
-    height: 270pt;
+    height: 300pt;
 }
 
 .settingsheader
 {
-    margin-top: 0pt;
+    margin-top: -5pt;
     text-align: center;
 }
 
@@ -234,4 +234,9 @@ body
 #cturn
 {
     margin-left: 7pt;
+}
+
+#playbutton
+{
+    width: 150pt;
 }
