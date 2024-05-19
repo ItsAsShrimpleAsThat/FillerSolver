@@ -105,6 +105,7 @@ body
     margin-left: 10pt;
     flex-direction: column;
     width: 300pt;
+    height: 206pt;
 }
 
 .settingsheader
@@ -192,4 +193,25 @@ body
 #gobutton
 {
     margin-right: 15pt;
+}
+
+.areaborder
+{
+    border: 2px solid black;
+    border-radius: 5pt;
+}
+
+#searchdepthlbl
+{
+    margin-left: 7pt;
+}
+
+#infinitedepth
+{
+    margin-right:7pt;
+}
+
+#cturn
+{
+    margin-left: 7pt;
 }

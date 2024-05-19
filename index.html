@@ -20,14 +20,14 @@
                 <canvas id="colorcanvas" class = "colorinput"></canvas>
             </div>
 
-            <div class="settingsmenuflex">
+            <div class="settingsmenuflex areaborder">
                 <div class="smalltext settingsheader">
                     <p id="searchsettingsheader">Search Settings</p>
                 </div>
                 
                 <div class="settingslayer" id="layer1">
                     <div class="settingslayer1left">
-                        <label for="depthinput" class="smallertext inputlabel">Search Depth:</label>
+                        <label for="depthinput" class="smallertext inputlabel" id="searchdepthlbl">Search Depth:</label>
                         <input type="text" value="20" class="inputfield" id="depthinput" name="depthinput">
                     </div>
 
@@ -39,7 +39,7 @@
 
                 <div class="settingslayer" id="layer2">
                     <div class="settingslayer1left">
-                        <p class="smallertext currentturn">Current Turn:</p>
+                        <p class="smallertext currentturn" id="cturn">Current Turn:</p>
                         <label for="mebox" class="smallertext inputlabel" id="melabel">Me:</label>
                         <input type="checkbox" class="checkbox" name="mebox" id="mebox" checked />
                         
