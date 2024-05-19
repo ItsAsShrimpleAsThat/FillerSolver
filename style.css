@@ -101,11 +101,11 @@ body
 .settingsmenuflex
 {
     display: flex;
-    margin-top: 25pt;
+    margin-top: 36pt;
     margin-left: 10pt;
     flex-direction: column;
     width: 325pt;
-    height: 206pt;
+    height: 270pt;
 }
 
 .settingsheader
@@ -182,12 +182,32 @@ body
 #layer2
 {
     margin-top:10pt;
+    justify-content: center;
 }
 
 #layer3
 {
-    margin-top:25pt;
+    margin-top:10pt;
     justify-content: center;
+}
+
+#layer4
+{
+    margin-top:10pt;
+    justify-content: center;
+}
+
+#layer5
+{
+    margin-top:10pt;
+    justify-content: center;
+}
+
+#quidepth
+{
+    width: 35pt;
+    height: 30pt;
+    text-indent: 7pt;
 }
 
 #gobutton
@@ -203,12 +223,12 @@ body
 
 #searchdepthlbl
 {
-    margin-left: 7pt;
+    margin-left: 20pt;
 }
 
 #infinitedepth
 {
-    margin-right:7pt;
+    margin-right:20pt;
 }
 
 #cturn

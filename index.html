@@ -28,7 +28,7 @@
                 <div class="settingslayer" id="layer1">
                     <div class="settingslayer1left">
                         <label for="depthinput" class="smallertext inputlabel" id="searchdepthlbl">Search Depth:</label>
-                        <input type="text" value="20" class="inputfield" id="depthinput" name="depthinput">
+                        <input type="text" value="20" class="inputfield" id="depthinput" name="depthinput" placeholder="20">
                     </div>
 
                     <div class="settingslayer1right">
@@ -47,8 +47,23 @@
                         <input type="checkbox" class="checkbox" name="opponentbox" id="opponentbox">
                     </div>
                 </div>
-                
+
                 <div class="settingslayer" id="layer3">
+                    <div class="settingslayer1left">
+                        <label for="iterdeep" class="smallertext inputlabel" id="iterdeep">Iterative Deepening:</label>
+                        <input type="checkbox" class="checkbox" name="iterdeep" id="iterdeep" checked />
+                        
+                        <label for="quiescence" class="smallertext inputlabel" id="opponentlabel">Quiescence Search</label>
+                        <input type="checkbox" class="checkbox" name="quiescence" id="quiescence" checked />
+                    </div>
+                </div>
+                
+                <div class="settingslayer" id="layer4">
+                    <label for="quidepth" class="smallertext inputlabel" id="quidepthlbl">Quiescence Search Limit:</label>
+                    <input type="text" value="2" class="inputfield" id="quidepth" name="quidepth" placeholder="2">
+                </div>
+
+                <div class="settingslayer" id="layer5">
                     <button class="gobutton inputfield" id="gobutton">Start!</button>
                     <button class="gobutton inputfield" id="stopbutton" disabled>Stop</button>
                 </div>

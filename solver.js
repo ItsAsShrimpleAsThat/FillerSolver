@@ -34,6 +34,10 @@ let selectedColor = 0;
 let currentGame = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0],
                    [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
 
+let searchGame = [];
+let searchTurn = true;
+let doSearch = true;
+
 let boxes = [];
 let previousSelectedBox = -1;
 
@@ -43,6 +47,9 @@ const depthInputField = document.getElementById("depthinput");
 const infiniteDepthSelector = document.getElementById("infinitedepth");
 const goButton = document.getElementById("gobutton");
 const stopButton = document.getElementById("stopbutton");
+
+//SEARCH VARS
+let depth = 20;
 
 for(let x = 0; x < 8; x++)
 {
@@ -93,13 +100,50 @@ function screenCoord2gridCoord(mx, my)
     }
 }
 
+class Turn
+{
+    constructor(capturedThisTurn, turnColor, meToMove)
+    {
+        this.capturedThisTurn = capturedThisTurn;
+        this.turnColor = turnColor;
+        this.meToMove = meToMove;
+    }
+}
+
+function MakeTurn(turn)
+{
+    turnCaps = turn.capturedThisTurn;
+    for(let i = 0; i < turnCaps.length; i++)
+    {
+        //capture the squares
+        searchGame[turnCaps[0], turnCaps[1]] = turn.turnColor;
+    }
+}
+
+function UnmakeTurn(turn)
+{
+    turnCaps = turn.capturedThisTurn;
+    for(let i = 0; i < turnCaps.length; i++)
+    {
+        //set squares back to original colors
+        searchGame[turnCaps[0], turnCaps[1]] = turnCaps[2];
+    }
+}
+
+let bestTurn = new Turn([], 0, false);
 function search()
 {
-    
+    while(doSearch)
+    {
+        
+    }
 }
 
 function startSearch()
 {
+    searchGame = currentGame;
+    searchTurn = myTurnCheckbox.checked
+
     goButton.disabled = true;
     stopButton.disabled = false;
     
