@@ -93,6 +93,19 @@ function screenCoord2gridCoord(mx, my)
     }
 }
 
+function search()
+{
+    
+}
+
+function startSearch()
+{
+    goButton.disabled = true;
+    stopButton.disabled = false;
+    
+    
+}
+
 function clickEvent(canvas, event) {
     const rect = canvas.getBoundingClientRect()
     let x = (event.clientX - rect.left) * clickX2canvasX;
