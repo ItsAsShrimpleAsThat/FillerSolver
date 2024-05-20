@@ -22,6 +22,8 @@ const yellow = 3;
 const blue = 4;
 const purple = 5;
 const black = 6;
+const myCaptured = 7;
+const oppCaptured = 8
 
 const colors = ["rgb(255, 255, 255)", "rgb(234, 93, 110)", "rgb(150, 186, 88)", "rgb(219, 198, 70)", 
                                       "rgb(77, 145, 208)", "rgb(90, 67, 139)", "rgb(65, 65, 65)"];
@@ -37,6 +39,10 @@ let currentGame = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0,
 let searchGame = [];
 let searchTurn = true;
 let doSearch = true;
+let myTerritory = [];
+let oppTerritory = [];
+let myColor = unfill;
+let oppColor = unfill;
 
 let boxes = [];
 let previousSelectedBox = -1;
@@ -47,9 +53,6 @@ const depthInputField = document.getElementById("depthinput");
 const infiniteDepthSelector = document.getElementById("infinitedepth");
 const goButton = document.getElementById("gobutton");
 const stopButton = document.getElementById("stopbutton");
-
-//SEARCH VARS
-let depth = 20;
 
 for(let x = 0; x < 8; x++)
 {
@@ -102,25 +105,90 @@ function screenCoord2gridCoord(mx, my)
 
 class Turn
 {
-    constructor(capturedThisTurn, turnColor, meToMove)
+    constructor(capturedThisTurn, selectedColor)
     {
         this.capturedThisTurn = capturedThisTurn;
-        this.turnColor = turnColor;
-        this.meToMove = meToMove;
+        this.selectedColor = selectedColor
     }
 }
 
-function MakeTurn(turn)
+function sum2Length(arr1, arr2)
+{
+    return [arr1[0] + arr2[0], arr1[1] + arr2[1]];
+}
+
+function arraysEqual(a, b)
+{
+    for (let i = 0; i < a.length; i++) 
+    {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}
+
+function arrayContainsArray(array, target)
+{
+    for (let i = 0; i < array.length; i++) 
+    {
+        if (arraysEqual(array[i], target)) return true;
+    }
+    return false;
+}
+
+const offsets = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+function generateTurns(meToMove)
+{
+    let workingTerritory = meToMove ? myTerritory : oppTerritory;
+    let generatedTurns = [[], [], [], [], [], []];
+
+    for(let i = 0; i < workingTerritory.length; i++)
+    {
+        for(let direction = 0; direction < 4; direction++)
+        {
+            let coordToCheck = sum2Length(workingTerritory[i], offsets[direction]);
+            
+            if(!workingTerritory.includes(coordToCheck))
+            {
+                //using old function lmao
+                if(mouseInBox(coordToCheck[0], coordToCheck[1], -1, -1, 8, 7))
+                {
+                    let color = searchGame[coordToCheck[0]][coordToCheck[1]] - 1;
+
+                    if(color + 1 != myColor && color + 1 != oppColor)
+                    {
+                        if(!arrayContainsArray(generatedTurns[color], coordToCheck))
+                        {
+                            generatedTurns[color].push(coordToCheck);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    console.log(generatedTurns)
+    let turnsArray = [];
+    //filter for any colors that have no moves
+    for(let i = 0; i < 6; i++)
+    {
+        if(generatedTurns[i].length > 0)
+        {
+            turnsArray.push(new Turn(generatedTurns[i], i + 1));
+        }
+    }
+    return turnsArray;
+}
+
+function makeTurn(turn, meToMove)
 {
     turnCaps = turn.capturedThisTurn;
     for(let i = 0; i < turnCaps.length; i++)
     {
         //capture the squares
-        searchGame[turnCaps[0], turnCaps[1]] = turn.turnColor;
+        searchGame[turnCaps[0], turnCaps[1]] = meToMove ? myCaptured : oppCaptured;
     }
 }
 
-function UnmakeTurn(turn)
+function unmakeTurn(turn)
 {
     turnCaps = turn.capturedThisTurn;
     for(let i = 0; i < turnCaps.length; i++)
@@ -131,11 +199,11 @@ function UnmakeTurn(turn)
 }
 
 let bestTurn = new Turn([], 0, false);
-function search()
+function search(depth)
 {
     while(doSearch)
     {
-        
+        //searchTurns = 
     }
 }
 
@@ -191,7 +259,7 @@ function clickEvent(canvas, event) {
             {
                 ctx.fillStyle = colors[selectedColor];
                 ctx.fillRect(leftOffset + (gridCoord[0] * squareSize), gridCoord[1] * squareSize + topMargin, squareSize,  squareSize);  
-                currentGame[gridCoord[0], gridCoord[1]] = selectedColor;
+                currentGame[gridCoord[0]][gridCoord[1]] = selectedColor;
             }
         }
     }
