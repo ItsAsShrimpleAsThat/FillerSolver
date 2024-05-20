@@ -147,7 +147,7 @@ function generateTurns(meToMove)
         {
             let coordToCheck = sum2Length(workingTerritory[i], offsets[direction]);
             
-            if(!workingTerritory.includes(coordToCheck))
+            if(!arrayContainsArray(workingTerritory, coordToCheck))
             {
                 //using old function lmao
                 if(mouseInBox(coordToCheck[0], coordToCheck[1], -1, -1, 8, 7))
@@ -165,7 +165,7 @@ function generateTurns(meToMove)
             }
         }
     }
-    console.log(generatedTurns)
+    
     let turnsArray = [];
     //filter for any colors that have no moves
     for(let i = 0; i < 6; i++)
