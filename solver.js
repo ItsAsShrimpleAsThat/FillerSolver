@@ -194,16 +194,59 @@ function unmakeTurn(turn)
     for(let i = 0; i < turnCaps.length; i++)
     {
         //set squares back to original colors
-        searchGame[turnCaps[0], turnCaps[1]] = turnCaps[2];
+        searchGame[turnCaps[0], turnCaps[1]] = turn.selectedColor;
     }
 }
 
+function evaluate(game)
+{
+    return 69;
+}
+
 let bestTurn = new Turn([], 0, false);
+let previousBestEvalutaion = -99999;
 function search(depth)
 {
-    while(doSearch)
+    if(!doSearch)
     {
-        //searchTurns = 
+        return 0;
+    }
+
+    let searchTurns = generateTurns(searchTurn);
+    //detect win or locked positions
+
+    if(depth == 0)
+    {
+        return evaluate(searchGame)
+    }
+
+    let eval = -999999;
+    for(let i = 0; i < searchTurns.length; i++)
+    {
+        makeTurn(searchTurns[i], searchTurn);
+        searchTurn = !searchTurn;
+            
+        //recursive search
+        eval = Math.max(eval, -search(depth - 1));
+
+        unmakeTurn(searchTurns[i]);
+        searchTurn = !searchTurn;
+
+        if(eval > previousBestEvalutaion)
+        {
+            previousBestEvalutaion = eval;
+            bestTurn = searchTurns[i];
+        }
+    }
+
+    return eval;
+}
+
+function findTerritory(originCoord)
+{
+    for(let safetyLimit = 0; safetyLimit < 56; safetyLimit++)
+    {
+         
     }
 }
 
