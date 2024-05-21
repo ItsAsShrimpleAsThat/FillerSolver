@@ -178,29 +178,55 @@ function generateTurns(meToMove)
     return turnsArray;
 }
 
+function removeElementFromArray(array, filter)
+{
+    let newArray = [];
+
+    for(let i = 0; i < array.length; i++)
+    {
+        if(!arrayContainsArray(array, filter)) { newArray.push(array[i]); }
+    }
+
+    return newArray;
+}
+
 function makeTurn(turn, meToMove)
 {
-    turnCaps = turn.capturedThisTurn;
+    let turnCaps = turn.capturedThisTurn;
     for(let i = 0; i < turnCaps.length; i++)
     {
         //capture the squares
-        searchGame[turnCaps[0], turnCaps[1]] = meToMove ? myCaptured : oppCaptured;
+        let currentCoord = turnCaps[i];
+        searchGame[currentCoord[0]][currentCoord[1]] = meToMove ? myCaptured : oppCaptured;
+        if(meToMove) { myTerritory.push([currentCoord[0], currentCoord[1]]); }
+        else { oppTerritory.push([currentCoord[0], currentCoord[1]]); }
     }
 }
 
-function unmakeTurn(turn)
+function unmakeTurn(turn, meToMove)
 {
-    turnCaps = turn.capturedThisTurn;
+    let turnCaps = turn.capturedThisTurn;
     for(let i = 0; i < turnCaps.length; i++)
     {
         //set squares back to original colors
-        searchGame[turnCaps[0], turnCaps[1]] = turn.selectedColor;
+        let currentCoord = turnCaps[i];
+        searchGame[currentCoord[0], currentCoord[1]] = turn.selectedColor;
+        if(meToMove) { myTerritory = removeElementFromArray(myTerritory, [currentCoord[0], currentCoord[1]]); }
+        else { oppTerritory = removeElementFromArray(oppTerritory, [currentCoord[0], currentCoord[1]]); }
     }
 }
 
+//evaluation function evaluating...
+//# of cells captured
+//number of cells touching?
 function evaluate(game)
 {
-    return 69;
+    let myCells = myTerritory.length;
+    let oppCells = oppTerritory.length;
+
+    let eval = myCells - oppCells;
+
+    return eval;
 }
 
 let bestTurn = new Turn([], 0, false);
@@ -229,8 +255,8 @@ function search(depth)
         //recursive search
         eval = Math.max(eval, -search(depth - 1));
 
-        unmakeTurn(searchTurns[i]);
         searchTurn = !searchTurn;
+        unmakeTurn(searchTurns[i]);
 
         if(eval > previousBestEvalutaion)
         {
