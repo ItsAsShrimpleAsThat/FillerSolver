@@ -268,14 +268,68 @@ function search(depth)
     return eval;
 }
 
-function findTerritory(originCoord)
+function getNeigbors(coord)
 {
-    for(let safetyLimit = 0; safetyLimit < 56; safetyLimit++)
+    let neighbors = [];
+
+    for(let direction = 0; direction < 4; direction++)
     {
-         
+        let checkingCoord = sum2Length(coord, offsets[direction])
+        
+        if(mouseInBox(checkingCoord[0], checkingCoord[1], -1, -1, 8, 7))
+        {
+            neighbors.push(checkingCoord);
+        }
     }
+    return neighbors;
 }
 
+function coordinateTo56(coord)
+{
+    return coord[1] * 8 + coord[0];
+}
+
+//non recursive implementation of breadth first search
+function findTerritory(startingCoord, color)
+{
+    let queue = [];
+    let visited = new Array(56).fill(false);
+
+    visited[startingCoord] = true;
+    queue.push(startingCoord);
+    
+    while (queue.length > 0) {
+        let neighbors =  getNeigbors(queue.shift());
+        for (let neighbor of neighbors) 
+        {
+            coord56 = coordinateTo56(neighbor);
+            if (!visited[coord56]) 
+            {
+                if(searchGame[neighbor[0]][neighbor[1]] == color)
+                {
+                    console.log(searchGame[neighbor[0]][neighbor[1]])
+                    visited[coord56] = true;
+                    queue.push(neighbor);
+
+                    console.log("appending coordinate " + neighbor);
+                }
+            }
+        }
+    }
+    
+    let territory = [];
+    for(let x = 0; x < 8; x++)
+    {
+        for(let y = 0; y < 7; y++)
+        {
+            if(visited[coordinateTo56([x, y])])
+            {
+                territory.push([x, y]);
+            }
+        }
+    }
+    console.log(territory);
+}
 function startSearch()
 {
     searchGame = currentGame;
