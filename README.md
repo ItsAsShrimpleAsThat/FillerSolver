@@ -13,8 +13,12 @@ There are 2 modes: <b>Search mode</b> and <b>Solve mode</b>.
 <b>Solve mode</b> will fully solve the game. It will search every single possible position in the game, which will take much longer than Search mode.
 
 Details about how to use each mode are provided below.
-### Search Mode
+
+## Setting up the board
 WIP
 
-### Solve Mode
+## Search Mode
+WIP
+
+## Solve Mode
 WIP

@@ -53,6 +53,9 @@ const depthInputField = document.getElementById("depthinput");
 const infiniteDepthSelector = document.getElementById("infinitedepth");
 const goButton = document.getElementById("gobutton");
 const stopButton = document.getElementById("stopbutton");
+const iterDeepeningCheckbox = document.getElementById("iterdeep");
+const quiescenceSearchCheckbox = document.getElementById("quiescence");
+const quiLimitInputField = document.getElementById("quidepth");
 
 for(let x = 0; x < 8; x++)
 {
@@ -178,13 +181,13 @@ function generateTurns(meToMove)
     return turnsArray;
 }
 
-function removeElementFromArray(array, filter)
+function removeArrayFromArray(array, filter)
 {
     let newArray = [];
 
     for(let i = 0; i < array.length; i++)
     {
-        if(!arrayContainsArray(array, filter)) { newArray.push(array[i]); }
+        if(!arraysEqual(array[i], filter)) { newArray.push(array[i]); }
     }
 
     return newArray;
@@ -198,8 +201,9 @@ function makeTurn(turn, meToMove)
         //capture the squares
         let currentCoord = turnCaps[i];
         searchGame[currentCoord[0]][currentCoord[1]] = meToMove ? myCaptured : oppCaptured;
-        if(meToMove) { myTerritory.push([currentCoord[0], currentCoord[1]]); }
-        else { oppTerritory.push([currentCoord[0], currentCoord[1]]); }
+        if(meToMove) { myTerritory.push(currentCoord); }
+        else { oppTerritory.push(currentCoord); }
+        searchTurn = !searchTurn;
     }
 }
 
@@ -208,11 +212,13 @@ function unmakeTurn(turn, meToMove)
     let turnCaps = turn.capturedThisTurn;
     for(let i = 0; i < turnCaps.length; i++)
     {
+        //reset turn first
+        searchTurn = !searchTurn;
         //set squares back to original colors
         let currentCoord = turnCaps[i];
-        searchGame[currentCoord[0], currentCoord[1]] = turn.selectedColor;
-        if(meToMove) { myTerritory = removeElementFromArray(myTerritory, [currentCoord[0], currentCoord[1]]); }
-        else { oppTerritory = removeElementFromArray(oppTerritory, [currentCoord[0], currentCoord[1]]); }
+        searchGame[currentCoord[0]][currentCoord[1]] = turn.selectedColor;
+        if(meToMove) { myTerritory = removeArrayFromArray(myTerritory, currentCoord); }
+        else { oppTerritory = removeArrayFromArray(oppTerritory, currentCoord); }
     }
 }
 
@@ -225,47 +231,54 @@ function evaluate(game)
     let oppCells = oppTerritory.length;
 
     let eval = myCells - oppCells;
-
-    return eval;
+    let perspective = searchTurn ? 1 : -1;
+    console.log(searchTurn + " eval: " + eval * perspective)
+    return eval * perspective;
 }
 
 let bestTurn = new Turn([], 0, false);
 let previousBestEvalutaion = -99999;
-function search(depth)
+function search(depth, alpha, beta)
 {
     if(!doSearch)
     {
         return 0;
     }
 
-    let searchTurns = generateTurns(searchTurn);
     //detect win or locked positions
-
+    
     if(depth == 0)
     {
-        return evaluate(searchGame)
+        return evaluate(searchGame); 
     }
 
-    let eval = -999999;
+    let searchTurns = generateTurns(searchTurn);
+    
     for(let i = 0; i < searchTurns.length; i++)
     {
         makeTurn(searchTurns[i], searchTurn);
         searchTurn = !searchTurn;
-            
+        console.log(searchTurn);
+
         //recursive search
-        eval = Math.max(eval, -search(depth - 1));
+        let eval = -search(depth - 1, -alpha, -beta);
 
         searchTurn = !searchTurn;
-        unmakeTurn(searchTurns[i]);
+        unmakeTurn(searchTurns[i], searchTurn);
 
-        if(eval > previousBestEvalutaion)
+        if(eval >= beta)
         {
-            previousBestEvalutaion = eval;
-            bestTurn = searchTurns[i];
+            return beta;
+        }
+
+        if(eval > alpha)
+        {
+            currentBestTurn = searchTurns[i];
+            alpha = eval;
         }
     }
 
-    return eval;
+    return alpha;
 }
 
 function getNeigbors(coord)
@@ -290,12 +303,14 @@ function coordinateTo56(coord)
 }
 
 //non recursive implementation of breadth first search
-function findTerritory(startingCoord, color)
+function findTerritory(startingCoord)
 {
     let queue = [];
     let visited = new Array(56).fill(false);
+    const color = searchGame[startingCoord[0]][startingCoord[1]];
+    console.log(color);
 
-    visited[startingCoord] = true;
+    visited[coordinateTo56(startingCoord)] = true;
     queue.push(startingCoord);
     
     while (queue.length > 0) {
@@ -310,13 +325,12 @@ function findTerritory(startingCoord, color)
                     console.log(searchGame[neighbor[0]][neighbor[1]])
                     visited[coord56] = true;
                     queue.push(neighbor);
-
-                    console.log("appending coordinate " + neighbor);
                 }
             }
         }
     }
     
+    //get all visited nodes
     let territory = [];
     for(let x = 0; x < 8; x++)
     {
@@ -328,17 +342,54 @@ function findTerritory(startingCoord, color)
             }
         }
     }
-    console.log(territory);
+    return territory;
 }
+
 function startSearch()
 {
+    //set game variables
     searchGame = currentGame;
-    searchTurn = myTurnCheckbox.checked
+    searchTurn = myTurnCheckbox.checked;
+    myTerritory = findTerritory([0, 6]);
+    oppTerritory = findTerritory([7, 0]);
+
+    //reset search variables
+    bestTurn = new Turn([], 0, false);
+    previousBestEvalutaion = -99999;
 
     goButton.disabled = true;
     stopButton.disabled = false;
-    
-    
+    depthInputField.disabled = true;
+    infiniteDepthSelector.disabled = true;
+    myTurnCheckbox.disabled = true;
+    oppTurnCheckbox.disabled = true;
+    iterDeepeningCheckbox.disabled = true;
+    quiescenceSearchCheckbox.disabled = true;
+    quiLimitInputField.disabled = true;
+
+    console.log(myTerritory);
+    console.log(oppTerritory);
+
+    if(infiniteDepthSelector.checked)
+    {
+        //solve
+    }
+    else
+    {
+        if(iterDeepeningCheckbox.checked)
+        {
+            //use iterative deepening
+        }
+        else
+        {
+            console.log("fixed search");
+            //standard search until fixed depth
+            console.log(evaluate(searchGame));
+            console.log(search(depthInputField.value, -99999, 99999));
+        }
+    }
+
+    console.log(bestTurn);
 }
 
 function clickEvent(canvas, event) {
@@ -405,3 +456,37 @@ oppTurnCheckbox.addEventListener("change", function(){
 infiniteDepthSelector.addEventListener("change", function(){
     depthInputField.disabled = infiniteDepthSelector.checked; 
 });
+
+function gameToString()
+{
+    let savedString = "";
+
+    for(let x = 0; x < 8; x++)
+        {
+            for(let y = 0; y < 7; y++)
+            {
+                savedString += currentGame[x][y];
+            }
+
+            savedString += " ";
+        }
+}
+
+function stringToGame(gameToLoad)
+{
+    let loadedGame = [];
+
+    const splitted = gameToLoad.split(" ");
+    for(let i = 0; i < splitted.length; i++)
+    {
+        loadedGame.push(splitted[i].split(""));
+    }
+
+    return loadedGame;
+}
+
+function saveGameLocal()
+{
+
+    localStorage.setItem("")
+}
