@@ -457,19 +457,21 @@ infiniteDepthSelector.addEventListener("change", function(){
     depthInputField.disabled = infiniteDepthSelector.checked; 
 });
 
+//-----SAVE/LOAD CODE-----//
+
 function gameToString()
 {
     let savedString = "";
 
     for(let x = 0; x < 8; x++)
+    {
+        for(let y = 0; y < 7; y++)
         {
-            for(let y = 0; y < 7; y++)
-            {
-                savedString += currentGame[x][y];
-            }
-
-            savedString += " ";
+            savedString += currentGame[x][y];
         }
+
+        savedString += " ";
+    }
 }
 
 function stringToGame(gameToLoad)
@@ -485,8 +487,11 @@ function stringToGame(gameToLoad)
     return loadedGame;
 }
 
-function saveGameLocal()
-{
+const savedGameCanvas = document.getElementById("savedColor");
+const svctx = savedGameCanvas.getContext("2d");
 
-    localStorage.setItem("")
-}
+savedGameCanvas.width = 768
+savedGameCanvas.height = 600
+
+svctx.fillStyle = "rgb(200, 200, 200)";
+svctx.fillRect(0, 0, savedGameCanvas.width, savedGameCanvas.height);    
