@@ -57,14 +57,19 @@ const iterDeepeningCheckbox = document.getElementById("iterdeep");
 const quiescenceSearchCheckbox = document.getElementById("quiescence");
 const quiLimitInputField = document.getElementById("quidepth");
 
-for(let x = 0; x < 8; x++)
+function drawGrid()
 {
-    for(let y = 0; y < 7; y++)
+    for(let x = 0; x < 8; x++)
     {
-        ctx.fillStyle = "rgb(0, 0, 0)";
-        ctx.strokeRect(leftOffset + (x * squareSize), y * squareSize + topMargin, squareSize,  squareSize);  
+        for(let y = 0; y < 7; y++)
+        {
+            ctx.fillStyle = "rgb(0, 0, 0)";
+            ctx.strokeRect(leftOffset + (x * squareSize), y * squareSize + topMargin, squareSize,  squareSize);  
+        }
     }
 }
+
+drawGrid();
 
 for(let i = 1; i < 7; i++)
 {
@@ -469,9 +474,13 @@ function gameToString()
         {
             savedString += currentGame[x][y];
         }
-
-        savedString += " ";
+        
+        if(x != 7)
+        {
+            savedString += " ";
+        }
     }
+    return savedString;
 }
 
 function stringToGame(gameToLoad)
@@ -490,8 +499,78 @@ function stringToGame(gameToLoad)
 const savedGameCanvas = document.getElementById("savedColor");
 const svctx = savedGameCanvas.getContext("2d");
 
-savedGameCanvas.width = 768
-savedGameCanvas.height = 600
+savedGameCanvas.width = 400;
+savedGameCanvas.height = 340;
 
 svctx.fillStyle = "rgb(200, 200, 200)";
 svctx.fillRect(0, 0, savedGameCanvas.width, savedGameCanvas.height);    
+
+const sv_squareSize = 42;
+const sv_leftOffset = savedGameCanvas.width / 2 - (sv_squareSize * 4) 
+const sv_topMargin = 23;
+
+function drawSavedGame(game)
+{
+    svctx.fillStyle = "rgb(200, 200, 200)";
+    svctx.fillRect(0, 0, savedGameCanvas.width, savedGameCanvas.height);    
+    for(let x = 0; x < 8; x++)
+    {
+        for(let y = 0; y < 7; y++)
+        {
+            if(game[x][y] == unfill)
+            {
+                svctx.fillStyle = "rgb(0, 0, 0)";
+                svctx.strokeRect(sv_leftOffset + (x * sv_squareSize), y * sv_squareSize + sv_topMargin, sv_squareSize,  sv_squareSize);  
+            }
+            else
+            {
+                svctx.fillStyle = colors[game[x][y]];
+                svctx.fillRect(sv_leftOffset + (x * sv_squareSize), y * sv_squareSize + sv_topMargin, sv_squareSize,  sv_squareSize);
+            }
+        }
+    }
+}
+
+function getGameArrayToDraw()
+{
+    const item = localStorage.getItem("save");
+    if(item == "undefined" || item == null)
+    {
+        return Array(8).fill(Array(7).fill(unfill));
+    }
+    else
+    {
+        return stringToGame(localStorage.getItem("save"));
+    }
+}
+
+drawSavedGame(getGameArrayToDraw());
+
+const saveButton = document.getElementById("savebutton");
+const loadButton = document.getElementById("loadbutton");
+
+saveButton.addEventListener("click", function(){
+    localStorage.setItem("save", gameToString());
+    drawSavedGame(stringToGame(localStorage.getItem("save")));
+});
+
+loadButton.addEventListener("click", function(){
+    //reset screen
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, 490);
+    drawGrid();
+
+    currentGame = stringToGame(localStorage.getItem("save"));
+
+    for(let x = 0; x < 8; x++)
+    {
+        for(let y = 0; y < 7; y++)
+        {
+            if(currentGame[x][y] != unfill)
+            {
+                ctx.fillStyle = colors[currentGame[x][y]];
+                ctx.fillRect(leftOffset + (x * squareSize), y * squareSize + topMargin, squareSize,  squareSize); 
+            }
+        }
+    }
+})
