@@ -544,6 +544,12 @@ function getGameArrayToDraw()
     }
 }
 
+const deleteButton = document.getElementById("delbutton");
+deleteButton.addEventListener("click", function(){
+    localStorage.removeItem("save");
+    drawSavedGame(getGameArrayToDraw());
+});
+
 drawSavedGame(getGameArrayToDraw());
 
 const saveButton = document.getElementById("savebutton");
@@ -560,6 +566,12 @@ loadButton.addEventListener("click", function(){
     ctx.fillRect(0, 0, canvas.width, 490);
     drawGrid();
 
+    const item = localStorage.getItem("save");
+    if(item == "undefined" || item == null)
+    {
+        currentGame = Array(8).fill(Array(7).fill(unfill));
+        return
+    }
     currentGame = stringToGame(localStorage.getItem("save"));
 
     for(let x = 0; x < 8; x++)
