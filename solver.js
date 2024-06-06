@@ -26,7 +26,8 @@ const myCaptured = 7;
 const oppCaptured = 8
 
 const colors = ["rgb(255, 255, 255)", "rgb(234, 93, 110)", "rgb(150, 186, 88)", "rgb(219, 198, 70)", 
-                                      "rgb(77, 145, 208)", "rgb(90, 67, 139)", "rgb(65, 65, 65)"];
+                                      "rgb(77, 145, 208)", "rgb(90, 67, 139)", "rgb(65, 65, 65)", 
+                                      "rgb(255, 138, 185)", "rgb(138, 222, 255)"];
 const selectorGap = 30;
 const selectorDistFromTop = 505;
 const selectedBoxSizeDiff = 16; //MUST BE EVEN NUMBER TO PREVENT VISUAL BUGS
@@ -56,6 +57,14 @@ const stopButton = document.getElementById("stopbutton");
 const iterDeepeningCheckbox = document.getElementById("iterdeep");
 const quiescenceSearchCheckbox = document.getElementById("quiescence");
 const quiLimitInputField = document.getElementById("quidepth");
+
+let numPositionsSearched = 0;
+const stat_numPos = document.getElementById("numSearchedPos");
+
+function updateStats()
+{
+    stat_numPos.innerHTML = "Num Searched Positions: " + numPositionsSearched;
+}
 
 function drawGrid()
 {
@@ -162,7 +171,7 @@ function generateTurns(meToMove)
                 {
                     let color = searchGame[coordToCheck[0]][coordToCheck[1]] - 1;
 
-                    if(color + 1 != myColor && color + 1 != oppColor)
+                    if(color + 1 != myColor && color + 1 != oppColor && color < 6)
                     {
                         if(!arrayContainsArray(generatedTurns[color], coordToCheck))
                         {
@@ -242,6 +251,9 @@ let bestTurn = new Turn([], 0, false);
 let previousBestEvalutaion = -99999;
 function search(depth, alpha, beta)
 {
+    numPositionsSearched++;
+    updateStats();
+
     if(!doSearch)
     {
         return 0;
