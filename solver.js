@@ -208,7 +208,6 @@ function makeTurn(turn, meToMove)
         searchGame[currentCoord[0]][currentCoord[1]] = meToMove ? myCaptured : oppCaptured;
         if(meToMove) { myTerritory.push(currentCoord); }
         else { oppTerritory.push(currentCoord); }
-        searchTurn = !searchTurn;
     }
 }
 
@@ -217,8 +216,6 @@ function unmakeTurn(turn, meToMove)
     let turnCaps = turn.capturedThisTurn;
     for(let i = 0; i < turnCaps.length; i++)
     {
-        //reset turn first
-        searchTurn = !searchTurn;
         //set squares back to original colors
         let currentCoord = turnCaps[i];
         searchGame[currentCoord[0]][currentCoord[1]] = turn.selectedColor;
@@ -267,8 +264,8 @@ function search(depth, alpha, beta)
         //recursive search
         let eval = -search(depth - 1, -alpha, -beta);
 
-        unmakeTurn(searchTurns[i], searchTurn);
         searchTurn = !searchTurn;
+        unmakeTurn(searchTurns[i], searchTurn);
 
         if(eval > alpha)
         {
@@ -277,7 +274,7 @@ function search(depth, alpha, beta)
         }
 
         if(alpha >= beta)
-        { console.log(alpha + " " + beta)
+        {
             return beta;
         }
     }
