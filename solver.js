@@ -263,23 +263,22 @@ function search(depth, alpha, beta)
     {
         makeTurn(searchTurns[i], searchTurn);
         searchTurn = !searchTurn;
-        console.log(searchTurn);
 
         //recursive search
         let eval = -search(depth - 1, -alpha, -beta);
 
-        searchTurn = !searchTurn;
         unmakeTurn(searchTurns[i], searchTurn);
-
-        if(eval >= beta)
-        {
-            return beta;
-        }
+        searchTurn = !searchTurn;
 
         if(eval > alpha)
         {
-            currentBestTurn = searchTurns[i];
+            bestTurn = searchTurns[i];
             alpha = eval;
+        }
+
+        if(alpha >= beta)
+        { console.log(alpha + " " + beta)
+            return beta;
         }
     }
 
@@ -389,7 +388,6 @@ function startSearch()
         {
             console.log("fixed search");
             //standard search until fixed depth
-            console.log(evaluate(searchGame));
             console.log(search(depthInputField.value, -99999, 99999));
         }
     }
