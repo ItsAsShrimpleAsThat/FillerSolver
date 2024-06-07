@@ -122,10 +122,11 @@ function screenCoord2gridCoord(mx, my)
 
 class Turn
 {
-    constructor(capturedThisTurn, selectedColor)
+    constructor(capturedThisTurn, selectedColor, previousColor)
     {
         this.capturedThisTurn = capturedThisTurn;
-        this.selectedColor = selectedColor
+        this.selectedColor = selectedColor;
+        this.previousColor = previousColor;
     }
 }
 
@@ -189,7 +190,7 @@ function generateTurns(meToMove)
     {
         if(generatedTurns[i].length > 0)
         {
-            turnsArray.push(new Turn(generatedTurns[i], i + 1));
+            turnsArray.push(new Turn(generatedTurns[i], i + 1, searchTurn ? myColor : oppColor));
         }
     }
     return turnsArray;
@@ -215,8 +216,8 @@ function makeTurn(turn, meToMove)
         //capture the squares
         let currentCoord = turnCaps[i];
         searchGame[currentCoord[0]][currentCoord[1]] = meToMove ? myCaptured : oppCaptured;
-        if(meToMove) { myTerritory.push(currentCoord); }
-        else { oppTerritory.push(currentCoord); }
+        if(meToMove) { myTerritory.push(currentCoord); myColor = turn.selectedColor; }
+        else { oppTerritory.push(currentCoord); oppColor = turn.selectedColor; }
     }
 }
 
@@ -228,8 +229,8 @@ function unmakeTurn(turn, meToMove)
         //set squares back to original colors
         let currentCoord = turnCaps[i];
         searchGame[currentCoord[0]][currentCoord[1]] = turn.selectedColor;
-        if(meToMove) { myTerritory = removeArrayFromArray(myTerritory, currentCoord); }
-        else { oppTerritory = removeArrayFromArray(oppTerritory, currentCoord); }
+        if(meToMove) { myTerritory = removeArrayFromArray(myTerritory, currentCoord); myColor = turn.previousColor; }
+        else { oppTerritory = removeArrayFromArray(oppTerritory, currentCoord); oppColor = turn.previousColor; }
     }
 }
 
@@ -243,11 +244,11 @@ function evaluate(game)
 
     let eval = myCells - oppCells;
     let perspective = searchTurn ? 1 : -1;
-    console.log(searchTurn + " eval: " + eval * perspective)
+
     return eval * perspective;
 }
 
-let bestTurn = new Turn([], 0, false);
+let bestTurn = new Turn([], 0, false, 0);
 let previousBestEvalutaion = -99999;
 function search(depth, alpha, beta)
 {
@@ -367,7 +368,7 @@ function startSearch()
     oppTerritory = findTerritory([7, 0]);
 
     //reset search variables
-    bestTurn = new Turn([], 0, false);
+    bestTurn = new Turn([], 0, false, 0);
     previousBestEvalutaion = -99999;
 
     goButton.disabled = true;
@@ -379,6 +380,9 @@ function startSearch()
     iterDeepeningCheckbox.disabled = true;
     quiescenceSearchCheckbox.disabled = true;
     quiLimitInputField.disabled = true;
+
+    myColor = searchGame[0][6];
+    oppColor = searchGame[7][0];
 
     console.log(myTerritory);
     console.log(oppTerritory);
