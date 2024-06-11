@@ -59,6 +59,7 @@ const quiescenceSearchCheckbox = document.getElementById("quiescence");
 const quiLimitInputField = document.getElementById("quidepth");
 
 let numPositionsSearched = 0;
+let numQuiescencePositionsSearched = 0;
 const stat_numPos = document.getElementById("numSearchedPos");
 
 function updateStats()
@@ -154,7 +155,9 @@ function arrayContainsArray(array, target)
 }
 
 const offsets = [[0, 1], [0, -1], [1, 0], [-1, 0]];
-function generateTurns(meToMove)
+//generateQuietMoves is set to false when we only want to search positions that have high-value captures.
+//This is used in the quiescence search.
+function generateTurns(meToMove, generateQuietMoves)
 {
     let workingTerritory = meToMove ? myTerritory : oppTerritory;
     let generatedTurns = [[], [], [], [], [], []];
@@ -188,15 +191,27 @@ function generateTurns(meToMove)
     //filter for any colors that have no moves
     for(let i = 0; i < 6; i++)
     {
-        if(generatedTurns[i].length > 0)
+        if(generateQuietMoves) //if number of moves > 0, add move to list
         {
-            turnsArray.push(new Turn(generatedTurns[i], i + 1, searchTurn ? myColor : oppColor));
+            if(generatedTurns[i].length == 0)
+            {
+                continue;
+            }
         }
+        else //only add if the move is not quiet
+        {
+            if(generatedTurns[i].length < Math.min(workingTerritory.length, 2))
+            {
+                continue;
+            }
+        }
+
+        turnsArray.push(new Turn(generatedTurns[i], i + 1, searchTurn ? myColor : oppColor));
     }
     return turnsArray;
 }
 
-function generateNoCapsTurns(meToMove)
+function generateNoCapsTurns()
 {
     let turnsArray = [];
     for(let i = 1; i < 7; i++)
@@ -282,19 +297,12 @@ function search(depth, alpha, beta, doQuiescenceSearch)
     {
         if(doQuiescenceSearch)
         {
-            //return quiescenceSearch()
+            return quiescenceSearch(quiLimitInputField.value, alpha, beta)
         }
         else
         {
             return evaluate(searchGame); 
         }
-    }
-
-    let searchTurns = generateTurns(searchTurn);
-
-    if(searchTurns.length == 0)
-    {
-        searchTurns = generateNoCapsTurns(searchTurn); //No legal turn will capture any squares, so just play a random color
     }
 
     if(myTerritory.length > 28) //if over half the board is mine, we have won the game
@@ -304,6 +312,13 @@ function search(depth, alpha, beta, doQuiescenceSearch)
     if(oppTerritory.length > 28) //likewise, if over half the board is the opponent's, the opponent has won
     {
         return -999999 * searchTurn ? 1 : -1
+    }
+
+    let searchTurns = generateTurns(searchTurn, true);
+
+    if(searchTurns.length == 0)
+    {
+        searchTurns = generateNoCapsTurns(); //No legal turn will capture any squares, so just play a random color
     }
     
     for(let i = 0; i < searchTurns.length; i++)
@@ -334,7 +349,7 @@ function search(depth, alpha, beta, doQuiescenceSearch)
 
 function quiescenceSearch(depth, alpha, beta)
 {
-    numPositionsSearched++;
+    numQuiescencePositionsSearched++;
 
     if(!doSearch)
     {
@@ -348,15 +363,29 @@ function quiescenceSearch(depth, alpha, beta)
         return evaluate(searchGame);
     }
 
-    let searchTurns = generateTurns(searchTurn);
+    if(myTerritory.length > 28) //if over half the board is mine, we have won the game
+    {
+        return 999999 * searchTurn ? 1 : -1; 
+    }
+    if(oppTerritory.length > 28) //likewise, if over half the board is the opponent's, the opponent has won
+    {
+        return -999999 * searchTurn ? 1 : -1
+    }
+
+    let searchTurns = generateTurns(searchTurn, false);
     
+    if(searchTurns.length == 0)
+    {
+        return evaluate(searchGame); //unlike in our regular search, if there are no legal captures, we just end the search
+    }
+
     for(let i = 0; i < searchTurns.length; i++)
     {
         makeTurn(searchTurns[i], searchTurn);
         searchTurn = !searchTurn;
 
         //recursive search
-        let eval = -search(depth - 1, -alpha, -beta, doQuiescenceSearch);
+        let eval = -quiescenceSearch(depth - 1, -alpha, -beta);
 
         searchTurn = !searchTurn;
         unmakeTurn(searchTurns[i], searchTurn);
