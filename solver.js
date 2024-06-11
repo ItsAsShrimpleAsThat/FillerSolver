@@ -294,7 +294,7 @@ function search(depth, alpha, beta, doQuiescenceSearch)
 
     if(searchTurns.length == 0)
     {
-        return evaluate(searchGame); //No legal captures, return current positions eval
+        searchTurns = generateNoCapsTurns(searchTurn); //No legal turn will capture any squares, so just play a random color
     }
 
     if(myTerritory.length > 28) //if over half the board is mine, we have won the game
