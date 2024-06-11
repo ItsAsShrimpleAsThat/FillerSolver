@@ -196,6 +196,19 @@ function generateTurns(meToMove)
     return turnsArray;
 }
 
+function generateNoCapsTurns(meToMove)
+{
+    let turnsArray = [];
+    for(let i = 1; i < 7; i++)
+    {
+        if(i != myColor && i != oppColor )
+        {
+            turnsArray.push(new Turn([], i, searchTurn ? myColor : oppColor))
+        }
+    }
+    return turnsArray;
+}
+
 function removeArrayFromArray(array, filter)
 {
     let newArray = [];
@@ -216,9 +229,11 @@ function makeTurn(turn, meToMove)
         //capture the squares
         let currentCoord = turnCaps[i];
         searchGame[currentCoord[0]][currentCoord[1]] = meToMove ? myCaptured : oppCaptured;
-        if(meToMove) { myTerritory.push(currentCoord); myColor = turn.selectedColor; }
-        else { oppTerritory.push(currentCoord); oppColor = turn.selectedColor; }
+        if(meToMove) { myTerritory.push(currentCoord); }
+        else { oppTerritory.push(currentCoord); }
     }
+    if(meToMove) { myColor = turn.selectedColor; }
+    else { oppColor = turn.selectedColor; }
 }
 
 function unmakeTurn(turn, meToMove)
@@ -229,9 +244,11 @@ function unmakeTurn(turn, meToMove)
         //set squares back to original colors
         let currentCoord = turnCaps[i];
         searchGame[currentCoord[0]][currentCoord[1]] = turn.selectedColor;
-        if(meToMove) { myTerritory = removeArrayFromArray(myTerritory, currentCoord); myColor = turn.previousColor; }
-        else { oppTerritory = removeArrayFromArray(oppTerritory, currentCoord); oppColor = turn.previousColor; }
+        if(meToMove) { myTerritory = removeArrayFromArray(myTerritory, currentCoord); }
+        else { oppTerritory = removeArrayFromArray(oppTerritory, currentCoord); }
     }
+    if(meToMove) { myColor = turn.previousColor; }
+    else { oppColor = turn.previousColor; }
 }
 
 //evaluation function evaluating...
@@ -282,7 +299,7 @@ function search(depth, alpha, beta, doQuiescenceSearch)
 
     if(myTerritory.length > 28) //if over half the board is mine, we have won the game
     {
-        return 999999 * searchTurn ? 1 : -1;
+        return 999999 * searchTurn ? 1 : -1; 
     }
     if(oppTerritory.length > 28) //likewise, if over half the board is the opponent's, the opponent has won
     {
