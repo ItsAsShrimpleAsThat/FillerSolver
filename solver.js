@@ -250,10 +250,9 @@ function evaluate(game)
 
 let bestTurn = new Turn([], 0, false, 0);
 let previousBestEvalutaion = -99999;
-function search(depth, alpha, beta)
+function search(depth, alpha, beta, doQuiescenceSearch)
 {
     numPositionsSearched++;
-    updateStats();
 
     if(!doSearch)
     {
@@ -264,7 +263,72 @@ function search(depth, alpha, beta)
     
     if(depth == 0)
     {
-        return evaluate(searchGame); 
+        if(doQuiescenceSearch)
+        {
+            //return quiescenceSearch()
+        }
+        else
+        {
+            return evaluate(searchGame); 
+        }
+    }
+
+    let searchTurns = generateTurns(searchTurn);
+
+    if(searchTurns.length == 0)
+    {
+        return evaluate(searchGame); //No legal captures, return current positions eval
+    }
+
+    if(myTerritory.length > 28) //if over half the board is mine, we have won the game
+    {
+        return 999999 * searchTurn ? 1 : -1;
+    }
+    if(oppTerritory.length > 28) //likewise, if over half the board is the opponent's, the opponent has won
+    {
+        return -999999 * searchTurn ? 1 : -1
+    }
+    
+    for(let i = 0; i < searchTurns.length; i++)
+    {
+        makeTurn(searchTurns[i], searchTurn);
+        searchTurn = !searchTurn;
+
+        //recursive search
+        let eval = -search(depth - 1, -alpha, -beta, doQuiescenceSearch);
+
+        searchTurn = !searchTurn;
+        unmakeTurn(searchTurns[i], searchTurn);
+
+        if(eval > alpha)
+        {
+            bestTurn = searchTurns[i];
+            alpha = eval;
+        }
+
+        if(alpha >= beta)
+        {
+            return beta;
+        }
+    }
+
+    return alpha;
+}
+
+function quiescenceSearch(depth, alpha, beta)
+{
+    numPositionsSearched++;
+
+    if(!doSearch)
+    {
+        return 0;
+    }
+
+    //detect win or locked positions
+    
+    if(depth == 0)
+    {
+        return evaluate(searchGame);
     }
 
     let searchTurns = generateTurns(searchTurn);
@@ -275,7 +339,7 @@ function search(depth, alpha, beta)
         searchTurn = !searchTurn;
 
         //recursive search
-        let eval = -search(depth - 1, -alpha, -beta);
+        let eval = -search(depth - 1, -alpha, -beta, doQuiescenceSearch);
 
         searchTurn = !searchTurn;
         unmakeTurn(searchTurns[i], searchTurn);
@@ -399,9 +463,9 @@ function startSearch()
         }
         else
         {
-            console.log("fixed search");
             //standard search until fixed depth
-            console.log(search(depthInputField.value, -99999, 99999));
+            search(depthInputField.value, -99999, 99999, quiescenceSearchCheckbox.checked);
+            updateStats();
         }
     }
 
