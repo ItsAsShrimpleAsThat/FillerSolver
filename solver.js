@@ -60,13 +60,19 @@ const quiLimitInputField = document.getElementById("quidepth");
 
 let numPositionsSearched = 0;
 let numQuiescencePositionsSearched = 0;
+let numNodes = 0;
+let numQuiNodes = 0;
 const stat_numPos = document.getElementById("numSearchedPos");
 const stat_numPosQui = document.getElementById("numQuiSearchedPos");
+const stat_numNodes = document.getElementById("numNodes");
+const stat_numQuiNodes = document.getElementById("numQuiNodes");
 
 function updateStats()
 {
     stat_numPos.innerHTML = "Num Searched Positions: " + numPositionsSearched;
     stat_numPosQui.innerHTML = "Num Searched Pos (Quiescence search): " + numQuiescencePositionsSearched;
+    stat_numNodes.innerHTML = "Num Nodes: " + numNodes;
+    stat_numQuiNodes.innerHTML = "Num Nodes (Quiescence search): " + numQuiNodes;
 }
 
 function drawGrid()
@@ -163,6 +169,7 @@ function generateTurns(meToMove, generateQuietMoves)
 {
     let workingTerritory = meToMove ? myTerritory : oppTerritory;
     let generatedTurns = [[], [], [], [], [], []];
+    let numPossibleTurns = 0;
 
     for(let i = 0; i < workingTerritory.length; i++)
     {
@@ -182,6 +189,7 @@ function generateTurns(meToMove, generateQuietMoves)
                         if(!arrayContainsArray(generatedTurns[color], coordToCheck))
                         {
                             generatedTurns[color].push(coordToCheck);
+                            numPossibleTurns++;
                         }
                     }
                 }
@@ -202,7 +210,7 @@ function generateTurns(meToMove, generateQuietMoves)
         }
         else //only add if the move is not quiet
         {
-            if(generatedTurns[i].length < Math.min(workingTerritory.length, 2))
+            if(numPossibleTurns < Math.min(workingTerritory.length, 4))
             {
                 continue;
             }
