@@ -169,7 +169,7 @@ function generateTurns(meToMove, generateQuietMoves)
 {
     let workingTerritory = meToMove ? myTerritory : oppTerritory;
     let generatedTurns = [[], [], [], [], [], []];
-    let numPossibleTurns = 0;
+    let maxCaps = 0;
 
     for(let i = 0; i < workingTerritory.length; i++)
     {
@@ -189,7 +189,10 @@ function generateTurns(meToMove, generateQuietMoves)
                         if(!arrayContainsArray(generatedTurns[color], coordToCheck))
                         {
                             generatedTurns[color].push(coordToCheck);
-                            numPossibleTurns++;
+                            if(generatedTurns[color].length > maxCaps)
+                            {
+                                maxCaps = generatedTurns[color].length;
+                            }
                         }
                     }
                 }
@@ -210,7 +213,7 @@ function generateTurns(meToMove, generateQuietMoves)
         }
         else //only add if the move is not quiet
         {
-            if(numPossibleTurns < Math.min(workingTerritory.length, 4))
+            if(maxCaps < Math.min(workingTerritory.length * 0.5, 2))
             {
                 continue;
             }
