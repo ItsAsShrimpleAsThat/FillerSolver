@@ -218,7 +218,7 @@ function generateTurns(meToMove, generateQuietMoves)
         }
         else //only add if the move is not quiet
         {
-            if(maxCaps < Math.min(workingTerritory.length * 0.5, 2))
+            if(maxCaps < Math.min(workingTerritory.length * 0.5, 3))
             {
                 continue;
             }
