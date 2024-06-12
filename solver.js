@@ -210,6 +210,7 @@ function generateTurns(meToMove, generateQuietMoves)
             {
                 continue;
             }
+            numNodes++;
         }
         else //only add if the move is not quiet
         {
@@ -217,6 +218,7 @@ function generateTurns(meToMove, generateQuietMoves)
             {
                 continue;
             }
+            numQuiNodes++;
         }
 
         turnsArray.push(new Turn(generatedTurns[i], i + 1, searchTurn ? myColor : oppColor));
