@@ -66,6 +66,8 @@ const stat_numPos = document.getElementById("numSearchedPos");
 const stat_numPosQui = document.getElementById("numQuiSearchedPos");
 const stat_numNodes = document.getElementById("numNodes");
 const stat_numQuiNodes = document.getElementById("numQuiNodes");
+const result_color = document.getElementById("resultsquare");
+const result_turn = document.getElementById("resultturntext");
 
 function updateStats()
 {
@@ -73,6 +75,8 @@ function updateStats()
     stat_numPosQui.innerHTML = "Num Searched Pos (Quiescence search): " + numQuiescencePositionsSearched;
     stat_numNodes.innerHTML = "Num Nodes: " + numNodes;
     stat_numQuiNodes.innerHTML = "Num Nodes (Quiescence search): " + numQuiNodes;
+    result_color.style.backgroundColor = colors[bestTurn.selectedColor];
+    result_turn.innerHTML = searchTurn ? "for me" : "for my opponent"
 }
 
 function drawGrid()
