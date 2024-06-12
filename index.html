@@ -90,13 +90,27 @@
             </div>
         </div>
         <div class="colorinputmenuflex" style="margin-top: -15pt;">
-            <div class="settingsmenuflex areaborder" style="height: 150pt;">
+            <div class="settingsmenuflex areaborder" style="height: 200pt; width: 400pt">
                 <div class="smalltext settingsheader">
                     <p id="searchsettingsheader">Search Stats and Result</p>
                 </div>
-                <div class="settingslayer" id="layer1">
-                    <div class="settingslayer1left" style="margin-left: 10pt;">
-                        <p class="smallertext" id="numSearchedPos">Num Searched Positions: 0</p>
+                <div style="display: flex; flex-direction: row;">
+                    <div class="settingslayer1left" style="margin-left: 10pt; flex-direction: column; width: 40%">
+                        <div class="settingslayer" id="layer1">
+                            <p class="smallertext" id="numSearchedPos">Num Searched Positions: 0</p>
+                        </div>
+                        <div class="settingslayer" style="margin-top: 10pt;">
+                            <p class="smallertext" id="numQuiSearchedPos">Num Searched Pos (Quiescence search): 0</p>
+                        </div>
+                        
+                    </div>
+                    <div class="settingslayer1right" style="margin-right: 10pt; flex-direction: column; width: 40%">
+                        <div class="settingslayer" id="layer1">
+                            <p class="smallertext" id="numQuiSearchedPos">Num Nodes: 0</p>
+                        </div>
+                        <div class="settingslayer" style="margin-top: 10pt;">
+                            <p class="smallertext" id="numQuiSearchedPos">Num Nodes (Quiescence search): 0</p>
+                        </div>
                     </div>
                 </div>
             </div>

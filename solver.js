@@ -61,10 +61,12 @@ const quiLimitInputField = document.getElementById("quidepth");
 let numPositionsSearched = 0;
 let numQuiescencePositionsSearched = 0;
 const stat_numPos = document.getElementById("numSearchedPos");
+const stat_numPosQui = document.getElementById("numQuiSearchedPos");
 
 function updateStats()
 {
     stat_numPos.innerHTML = "Num Searched Positions: " + numPositionsSearched;
+    stat_numPosQui.innerHTML = "Num Searched Pos (Quiescence search): " + numQuiescencePositionsSearched;
 }
 
 function drawGrid()
