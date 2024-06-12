@@ -240,3 +240,19 @@ body
 {
     width: 150pt;
 }
+
+.square
+{
+    width: 25pt;
+    height: 25pt;
+    background-color: rgb(255, 255, 255);
+    border-color: #1d1d33;
+    border-width: 1pt;
+    border-radius: 5pt;
+}
+
+.result
+{
+    margin-top: 6pt;
+    margin-left: 10pt;
+}
