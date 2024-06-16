@@ -142,7 +142,6 @@ class Turn
         this.capturedThisTurn = capturedThisTurn;
         this.selectedColor = selectedColor;
         this.previousColor = previousColor;
-        this.orderScore = 0;
     }
 }
 
@@ -262,6 +261,8 @@ let bestTurnInLastIterativeDeepeningSearch = new Turn([], 0, 10);
 
 function orderMoves(moves)
 {
+    moves.sort((a, b) => b.capturedThisTurn.length - a.capturedThisTurn.length);
+
     if(useIterativeDeeping)
     {
         if(bestTurnInLastIterativeDeepeningSearch.previousColor != 10) //check to make sure this isnt depth = 1
@@ -420,6 +421,7 @@ function quiescenceSearch(depth, alpha, beta)
     //TODO: Delta pruning
 
     let searchTurns = generateTurns(searchTurn, false);
+    searchTurns = orderMoves(searchTurns);
     
     if(searchTurns.length == 0)
     {
