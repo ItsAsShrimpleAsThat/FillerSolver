@@ -58,6 +58,8 @@ const iterDeepeningCheckbox = document.getElementById("iterdeep");
 const quiescenceSearchCheckbox = document.getElementById("quiescence");
 const quiLimitInputField = document.getElementById("quidepth");
 
+let useIterativeDeeping = iterDeepeningCheckbox.checked;
+
 let numPositionsSearched = 0;
 let numQuiescencePositionsSearched = 0;
 let numNodes = 0;
@@ -140,6 +142,7 @@ class Turn
         this.capturedThisTurn = capturedThisTurn;
         this.selectedColor = selectedColor;
         this.previousColor = previousColor;
+        this.orderScore = 0;
     }
 }
 
@@ -255,6 +258,28 @@ function removeArrayFromArray(array, filter)
     return newArray;
 }
 
+let bestTurnInLastIterativeDeepeningSearch = new Turn([], 0, 10);
+
+function orderMoves(moves)
+{
+    if(useIterativeDeeping)
+    {
+        if(bestTurnInLastIterativeDeepeningSearch.previousColor != 10) //check to make sure this isnt depth = 1
+        {
+            for(let i = 0; i < moves.length; i++)
+            {
+                if(moves[i] == bestTurnInLastIterativeDeepeningSearch)
+                {
+                    let temp = moves[0];
+                    moves[0] = moves[i]
+                    moves[i] = temp;
+                }
+            }
+        }
+    }
+    return moves;
+}
+
 function makeTurn(turn, meToMove)
 {
     let turnCaps = turn.capturedThisTurn;
@@ -299,7 +324,7 @@ function evaluate(game)
     return eval * perspective;
 }
 
-let bestTurn = new Turn([], 0, false, 0);
+let bestTurn = new Turn([], 0, 0);
 let previousBestEvalutaion = -99999;
 function search(depth, alpha, beta, doQuiescenceSearch)
 {
@@ -334,6 +359,7 @@ function search(depth, alpha, beta, doQuiescenceSearch)
     }
 
     let searchTurns = generateTurns(searchTurn, true);
+    searchTurns = orderMoves(searchTurns);
 
     if(searchTurns.length == 0)
     {
@@ -390,6 +416,8 @@ function quiescenceSearch(depth, alpha, beta)
     {
         return -999999 * searchTurn ? 1 : -1
     }
+
+    //TODO: Delta pruning
 
     let searchTurns = generateTurns(searchTurn, false);
     
@@ -497,7 +525,7 @@ function startSearch()
     oppTerritory = findTerritory([7, 0]);
 
     //reset search variables
-    bestTurn = new Turn([], 0, false, 0);
+    bestTurn = new Turn([], 0, 0);
     previousBestEvalutaion = -99999;
 
     goButton.disabled = true;
@@ -509,6 +537,9 @@ function startSearch()
     iterDeepeningCheckbox.disabled = true;
     quiescenceSearchCheckbox.disabled = true;
     quiLimitInputField.disabled = true;
+
+    useIterativeDeeping = iterDeepeningCheckbox.checked;
+    bestTurnInLastIterativeDeepeningSearch = new Turn([], 0, 10);
 
     myColor = searchGame[0][6];
     oppColor = searchGame[7][0];
@@ -522,7 +553,7 @@ function startSearch()
     }
     else
     {
-        if(iterDeepeningCheckbox.checked)
+        if(useIterativeDeeping)
         {
             //use iterative deepening
         }

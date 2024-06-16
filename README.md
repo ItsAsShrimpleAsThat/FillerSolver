@@ -18,11 +18,13 @@ There are 3 modes: <b>Search mode</b>, <b>Solve mode</b>, and <b>Play mode</b>.
 #### The Board:
 Setting up the board is really easy. When you first open the website, you will see something like this:
 ![The color input you see upon opening the website](/images/color-input.png)
+
 Clicking on the colors at the bottom will select them. You will see them expand a little bit to show which color is selected.
 Copy the current state of your game from your phone to the website
 
 If you want, you can save the current state of the board using this menu on the side or load your last save
 ![The save/load menu](/images/board-save-load.png)
+
 The window shows the saved game
 
 #### The Search Settings
