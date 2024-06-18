@@ -73,6 +73,8 @@ const result_turn = document.getElementById("resultturntext");
 
 function updateStats()
 {
+    if(numQuiNodes == 0) { numQuiescencePositionsSearched = 0; }
+
     stat_numPos.innerHTML = "Num Searched Positions: " + numPositionsSearched;
     stat_numPosQui.innerHTML = "Num Searched Pos (Quiescence search): " + numQuiescencePositionsSearched;
     stat_numNodes.innerHTML = "Num Nodes: " + numNodes;
