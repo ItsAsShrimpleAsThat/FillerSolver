@@ -10,7 +10,7 @@ There are 3 modes: <b>Search mode</b>, <b>Solve mode</b>, and <b>Play mode</b>.
 
 <b>Search mode</b> operates a lot like a chess engine, such as Stockfish. In this mode, the solver will only search to a certain depth + some additional depth until the search has found quiescence <b>(if enabled)</b>. Many additional options are available in this mode.
 
-<b>Solve mode</b> will fully solve the game. It will search every single possible position in the game, which will take much longer than Search mode.
+<b>Solve mode</b> will fully solve the game. It will search every single possible position in the game, which will a bit longer than Search mode.
 
 <b>Play mode</b>
 

@@ -57,6 +57,7 @@ const stopButton = document.getElementById("stopbutton");
 const iterDeepeningCheckbox = document.getElementById("iterdeep");
 const quiescenceSearchCheckbox = document.getElementById("quiescence");
 const quiLimitInputField = document.getElementById("quidepth");
+const playButton = document.getElementById("playbutton");
 
 let useIterativeDeeping = iterDeepeningCheckbox.checked;
 
@@ -520,6 +521,8 @@ function findTerritory(startingCoord)
     return territory;
 }
 
+let infiniteSearchInProgress = false;
+
 function startSearch()
 {
     //set game variables
@@ -541,6 +544,7 @@ function startSearch()
     iterDeepeningCheckbox.disabled = true;
     quiescenceSearchCheckbox.disabled = true;
     quiLimitInputField.disabled = true;
+    playButton.disabled = true;
 
     useIterativeDeeping = iterDeepeningCheckbox.checked;
     bestTurnInLastIterativeDeepeningSearch = new Turn([], 0, 10);
@@ -548,8 +552,10 @@ function startSearch()
     myColor = searchGame[0][6];
     oppColor = searchGame[7][0];
 
-    console.log(myTerritory);
-    console.log(oppTerritory);
+    numPositionsSearched = 0;
+    numQuiescencePositionsSearched = 0;
+    numNodes = 0;
+    numQuiNodes = 0;
 
     if(infiniteDepthSelector.checked)
     {
@@ -566,10 +572,25 @@ function startSearch()
             //standard search until fixed depth
             search(depthInputField.value, -99999, 99999, quiescenceSearchCheckbox.checked);
             updateStats();
+            searchFinish();
         }
     }
 
     console.log(bestTurn);
+}
+
+function searchFinish()
+{
+    goButton.disabled = false;
+    stopButton.disabled = true;
+    depthInputField.disabled = false;
+    infiniteDepthSelector.disabled = false;
+    myTurnCheckbox.disabled = false;
+    oppTurnCheckbox.disabled = false;
+    iterDeepeningCheckbox.disabled = false;
+    quiescenceSearchCheckbox.disabled = false;
+    quiLimitInputField.disabled = false;
+    playButton.disabled = false;
 }
 
 function clickEvent(canvas, event) {
