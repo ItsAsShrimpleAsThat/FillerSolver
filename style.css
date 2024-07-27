@@ -258,3 +258,28 @@ body
     margin-top: 6pt;
     margin-left: 10pt;
 }
+
+.breakdowntable
+{
+    font-family: "Roboto", sans-serif;
+    border-collapse: collapse;
+    width: 95%;
+    margin: auto;
+}
+
+td, th
+{
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+tr
+{
+    background-color: #393339;
+}
+
+tr:nth-child(even)
+{
+    background-color: #2c272b;
+}

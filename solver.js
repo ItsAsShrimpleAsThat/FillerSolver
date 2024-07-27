@@ -559,7 +559,6 @@ function startSearch()
     numQuiescencePositionsSearched = 0;
     numNodes = 0;
     numQuiNodes = 0;
-
     
     if(useIterativeDeeping)
     {
