@@ -54,12 +54,15 @@ const depthInputField = document.getElementById("depthinput");
 const infiniteDepthSelector = document.getElementById("infinitedepth");
 const goButton = document.getElementById("gobutton");
 const stopButton = document.getElementById("stopbutton");
+let stopSearch = false;
+
 const iterDeepeningCheckbox = document.getElementById("iterdeep");
 const quiescenceSearchCheckbox = document.getElementById("quiescence");
 const quiLimitInputField = document.getElementById("quidepth");
 const playButton = document.getElementById("playbutton");
 
 let useIterativeDeeping = iterDeepeningCheckbox.checked;
+let infiniteDepthSearch = infiniteDepthSelector.checked;
 
 let numPositionsSearched = 0;
 let numQuiescencePositionsSearched = 0;
@@ -557,23 +560,33 @@ function startSearch()
     numNodes = 0;
     numQuiNodes = 0;
 
-    if(infiniteDepthSelector.checked)
+    
+    if(useIterativeDeeping)
     {
-        //solve
+        //use iterative deepening
+        let finalDepth = infiniteDepthSearch ? 100 : depthInputField.value; //if we are in solve mode, search to depth 100 (should be enough)
+        
+        for(let currentDepth = 1; currentDepth <= finalDepth; currentDepth++)
+        {
+            search(currentDepth, -99999, 99999, quiescenceSearchCheckbox.checked);
+            if(stopSearch)
+            {
+                stopSearch = false;
+                break;
+            }
+            bestTurnInLastIterativeDeepeningSearch = bestTurn;
+            updateStats();
+        }
+
+        updateStats();
+        searchFinish();
     }
     else
     {
-        if(useIterativeDeeping)
-        {
-            //use iterative deepening
-        }
-        else
-        {
-            //standard search until fixed depth
-            search(depthInputField.value, -99999, 99999, quiescenceSearchCheckbox.checked);
-            updateStats();
-            searchFinish();
-        }
+        //standard search until fixed depth
+        search(depthInputField.value, -99999, 99999, quiescenceSearchCheckbox.checked);
+        updateStats();
+        searchFinish();
     }
 
     console.log(bestTurn);
@@ -656,6 +669,8 @@ oppTurnCheckbox.addEventListener("change", function(){
 
 infiniteDepthSelector.addEventListener("change", function(){
     depthInputField.disabled = infiniteDepthSelector.checked; 
+    infiniteDepthSearch = infiniteDepthSelector.checked;
+    useIterativeDeeping = infiniteDepthSearch ? true : iterDeepeningCheckbox.checked; // enable iter deepening if we are in solve mode
 });
 
 //-----SAVE/LOAD CODE-----//
