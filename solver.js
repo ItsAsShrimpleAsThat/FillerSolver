@@ -87,8 +87,6 @@ function updateStats()
     stat_numQuiNodes.innerHTML = "Num Nodes (Quiescence search): " + numQuiNodes;
     result_color.style.backgroundColor = colors[bestTurn.selectedColor];
     result_turn.innerHTML = searchTurn ? "for me" : "for my opponent"
-
-    console.log("result firstchild " + breakdowntable.lastChild);
 }
 
 let previousDepthPositionsSearched = 0;
@@ -107,6 +105,11 @@ function addBreakdownTableEntry(depth, searchedpos, searchedposqui)
 
     previousDepthPositionsSearched = numPositionsSearched;
     previousDepthQuiPositionsSearched = numQuiescencePositionsSearched;
+}
+
+function clearBreakdownTable()
+{
+    breakdowntable.replaceChildren(breakdowntable.firstElementChild);
 }
 
 function drawGrid()
@@ -145,7 +148,6 @@ function getMouseBox(mx, my)
         if(mouseInBox(mx, my, currentBoxX, selectorDistFromTop, currentBoxX + squareSize, selectorDistFromTop + squareSize))
         {
             let boxNum = boxes[i - 1][1];
-            console.log("Selection Box Clicked, box #" + boxNum);
             return boxNum;
         }
     }
@@ -509,7 +511,6 @@ function findTerritory(startingCoord)
     let queue = [];
     let visited = new Array(56).fill(false);
     const color = searchGame[startingCoord[0]][startingCoord[1]];
-    console.log(color);
 
     visited[coordinateTo56(startingCoord)] = true;
     queue.push(startingCoord);
@@ -523,7 +524,6 @@ function findTerritory(startingCoord)
             {
                 if(searchGame[neighbor[0]][neighbor[1]] == color)
                 {
-                    console.log(searchGame[neighbor[0]][neighbor[1]])
                     visited[coord56] = true;
                     queue.push(neighbor);
                 }
@@ -584,6 +584,8 @@ function startSearch()
 
     previousDepthPositionsSearched = 0;
     previousDepthQuiPositionsSearched = 0;
+
+    clearBreakdownTable()
     
     if(useIterativeDeeping)
     {
