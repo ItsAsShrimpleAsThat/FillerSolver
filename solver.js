@@ -75,6 +75,8 @@ const stat_numQuiNodes = document.getElementById("numQuiNodes");
 const result_color = document.getElementById("resultsquare");
 const result_turn = document.getElementById("resultturntext");
 
+const breakdowntable = document.getElementById("statsbreakdowntable").firstElementChild;
+
 function updateStats()
 {
     if(numQuiNodes == 0) { numQuiescencePositionsSearched = 0; }
@@ -85,6 +87,17 @@ function updateStats()
     stat_numQuiNodes.innerHTML = "Num Nodes (Quiescence search): " + numQuiNodes;
     result_color.style.backgroundColor = colors[bestTurn.selectedColor];
     result_turn.innerHTML = searchTurn ? "for me" : "for my opponent"
+
+    console.log("result firstchild " + breakdowntable.lastChild);
+}
+
+function addBreakdownTableEntry(depth, searchedpos, searchedposqui)
+{
+    breakdowntable.appendChild(breakdowntable.lastElementChild.cloneNode(true));
+
+    breakdowntable.lastElementChild.children[0].innerHTML = depth;
+    breakdowntable.lastElementChild.children[1].innerHTML = searchedpos;
+    breakdowntable.lastElementChild.children[2].innerHTML = searchedposqui;
 }
 
 function drawGrid()
@@ -577,7 +590,6 @@ function startSearch()
             updateStats();
         }
 
-        updateStats();
         searchFinish();
     }
     else
