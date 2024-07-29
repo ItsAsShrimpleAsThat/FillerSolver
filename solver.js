@@ -91,6 +91,9 @@ function updateStats()
     console.log("result firstchild " + breakdowntable.lastChild);
 }
 
+let previousDepthPositionsSearched = 0;
+let previousDepthQuiPositionsSearched = 0;
+
 function addBreakdownTableEntry(depth, searchedpos, searchedposqui)
 {
     breakdowntable.appendChild(document.createElement("tr"));
@@ -101,6 +104,9 @@ function addBreakdownTableEntry(depth, searchedpos, searchedposqui)
     breakdowntable.lastElementChild.children[0].innerHTML = depth;
     breakdowntable.lastElementChild.children[1].innerHTML = searchedpos;
     breakdowntable.lastElementChild.children[2].innerHTML = searchedposqui;
+
+    previousDepthPositionsSearched = numPositionsSearched;
+    previousDepthQuiPositionsSearched = numQuiescencePositionsSearched;
 }
 
 function drawGrid()
@@ -575,6 +581,9 @@ function startSearch()
     numQuiescencePositionsSearched = 0;
     numNodes = 0;
     numQuiNodes = 0;
+
+    previousDepthPositionsSearched = 0;
+    previousDepthQuiPositionsSearched = 0;
     
     if(useIterativeDeeping)
     {
@@ -591,6 +600,7 @@ function startSearch()
             }
             bestTurnInLastIterativeDeepeningSearch = bestTurn;
             updateStats();
+            addBreakdownTableEntry(currentDepth, numPositionsSearched - previousDepthPositionsSearched, numQuiescencePositionsSearched - previousDepthQuiPositionsSearched);
         }
 
         searchFinish();
