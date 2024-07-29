@@ -93,7 +93,10 @@ function updateStats()
 
 function addBreakdownTableEntry(depth, searchedpos, searchedposqui)
 {
-    breakdowntable.appendChild(breakdowntable.lastElementChild.cloneNode(true));
+    breakdowntable.appendChild(document.createElement("tr"));
+    breakdowntable.lastElementChild.appendChild(document.createElement("td"));
+    breakdowntable.lastElementChild.appendChild(document.createElement("td"));
+    breakdowntable.lastElementChild.appendChild(document.createElement("td"));
 
     breakdowntable.lastElementChild.children[0].innerHTML = depth;
     breakdowntable.lastElementChild.children[1].innerHTML = searchedpos;
