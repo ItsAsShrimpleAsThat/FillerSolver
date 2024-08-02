@@ -61,6 +61,16 @@ const quiescenceSearchCheckbox = document.getElementById("quiescence");
 const quiLimitInputField = document.getElementById("quidepth");
 const playButton = document.getElementById("playbutton");
 
+const saveplaymode = document.getElementById("saveplaymodesession");
+const loadplaymode = document.getElementById("loadplaymodesession");
+const playedplaymode = document.getElementById("playandoppplayed");
+
+playedplaymode.disabled = true;
+
+let inPlayMode = false;
+let playModeMyTurn = false;
+let pm_colorSelected = false;
+
 let useIterativeDeeping = iterDeepeningCheckbox.checked;
 let infiniteDepthSearch = infiniteDepthSelector.checked;
 
@@ -632,6 +642,27 @@ function searchFinish()
     playButton.disabled = false;
 }
 
+function playmodeStart()
+{
+    inPlayMode = true;
+    pm_colorSelected = false;
+    playButton.innerHTML = "Exit Playmode"
+
+    //brings previous selected box's size back to normal
+    if(previousSelectedBox != -1)
+    {
+        let previousX = canvas.width / 2  + (selectorGap + squareSize) * (previousSelectedBox-4) + selectorGap/2;
+            
+        //Remove old fill
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(previousX - selectedBoxSizeDiff / 2, selectorDistFromTop - selectedBoxSizeDiff / 2, squareSize + selectedBoxSizeDiff, squareSize + selectedBoxSizeDiff);
+            
+        //draw new fill on top
+        ctx.fillStyle = colors[previousSelectedBox];
+        ctx.fillRect(previousX, selectorDistFromTop, squareSize, squareSize);
+    }
+}
+
 function clickEvent(canvas, event) {
     const rect = canvas.getBoundingClientRect()
     let x = (event.clientX - rect.left) * clickX2canvasX;
@@ -662,18 +693,27 @@ function clickEvent(canvas, event) {
         ctx.fillRect(selectedBoxX - selectedBoxSizeDiff / 2, selectorDistFromTop - selectedBoxSizeDiff / 2, squareSize + selectedBoxSizeDiff, squareSize + selectedBoxSizeDiff);
 
         previousSelectedBox = clickedBox;
+
+        if(inPlayMode)
+        {
+            pm_colorSelected = true;
+            playedplaymode.disabled = false;
+        }
     }
     else
     {
-        if(selectedColor != 0)
+        if(!inPlayMode)
         {
-            let gridCoord = screenCoord2gridCoord(x, y);
-
-            if(gridCoord != null)
+            if(selectedColor != 0)
             {
-                ctx.fillStyle = colors[selectedColor];
-                ctx.fillRect(leftOffset + (gridCoord[0] * squareSize), gridCoord[1] * squareSize + topMargin, squareSize,  squareSize);  
-                currentGame[gridCoord[0]][gridCoord[1]] = selectedColor;
+                let gridCoord = screenCoord2gridCoord(x, y);
+
+                if(gridCoord != null)
+                {
+                    ctx.fillStyle = colors[selectedColor];
+                    ctx.fillRect(leftOffset + (gridCoord[0] * squareSize), gridCoord[1] * squareSize + topMargin, squareSize,  squareSize);  
+                    currentGame[gridCoord[0]][gridCoord[1]] = selectedColor;
+                }
             }
         }
     }
@@ -685,12 +725,26 @@ canvas.addEventListener('mousedown', function(e) {
 
 goButton.addEventListener("click", startSearch);
 
+function updateEnterPlaymodeButton()
+{
+    if(myTurnCheckbox.checked)
+    {
+        playedplaymode.innerHTML = "I played my move!";
+    }
+    else
+    {
+        playedplaymode.innerHTML = "Opponent played this!"
+    }
+}
+
 myTurnCheckbox.addEventListener("change", function(){
     oppTurnCheckbox.checked = !myTurnCheckbox.checked;
+    updateEnterPlaymodeButton();
 });
 
 oppTurnCheckbox.addEventListener("change", function(){
     myTurnCheckbox.checked = !oppTurnCheckbox.checked;
+    updateEnterPlaymodeButton();
 });
 
 infiniteDepthSelector.addEventListener("change", function(){
@@ -822,4 +876,8 @@ loadButton.addEventListener("click", function(){
             }
         }
     }
-})
+});
+
+playButton.addEventListener("click", function(){
+    playmodeStart();
+});

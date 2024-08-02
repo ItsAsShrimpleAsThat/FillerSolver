@@ -108,7 +108,7 @@
                             <p class="smallertext" id="numSearchedPos">Num Searched Positions: 0</p>
                         </div>
                         <div class="settingslayer" style="margin-top: 10pt;">
-                            <p class="smallertext" id="numQuiSearchedPos">Num Searched Pos (Quiescence search): 0</p>
+                            <p class="smallertext" id="numQuiSearchedPos">Num Searched Pos (Qui search): 0</p>
                         </div>
                         
                     </div>
@@ -117,8 +117,28 @@
                             <p class="smallertext" id="numNodes">Num Nodes: 0</p>
                         </div>
                         <div class="settingslayer" style="margin-top: 10pt;">
-                            <p class="smallertext" id="numQuiNodes">Num Nodes (Quiescence search): 0</p>
+                            <p class="smallertext" id="numQuiNodes">Num Nodes (Qui search): 0</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settingsmenuflex areaborder" style="height: 200pt; width: 350pt">
+                <div class="smalltext settingsheader">
+                    <p id="searchsettingsheader">Playmode</p>
+                    <div class="settingslayer" style="margin-top: 7pt;">
+                        <p class="smalltext" style="margin-left: 10pt;">Current Status: </p>
+                        <p class="smallertext" style="margin-left: 8pt; margin-top: 6pt;">Playmode is off</p>
+                    </div>
+                    <div class="settingslayer" style="margin-top: 18pt; justify-content: center;">
+                        <button class="gobutton inputfield" id="saveplaymodesession" style="width: 100pt; margin-right: 5pt;">Save session</button>
+                        <button class="gobutton inputfield" id="loadplaymodesession" style="width: 100pt; margin-right: 7pt;">Load session</button>
+                        <div style="margin-bottom: 0pt;">
+                            <label for="autoloadsession" class="smallertext inputlabel">Auto load save?</label>
+                            <input type="checkbox" class="checkbox" name="autoloadsession" id="autoloadsession" style="margin-left: -1pt;" checked />
+                        </div>
+                    </div>
+                    <div class="settingslayer" style="margin-top: 10pt; justify-content: center;">
+                        <button class="gobutton inputfield" id="playandoppplayed" style="width: 150pt;">I played my move!</button>
                     </div>
                 </div>
             </div>
