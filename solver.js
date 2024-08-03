@@ -145,6 +145,23 @@ for(let i = 1; i < 7; i++)
     boxes.push([boxX, i]);
 }
 
+function redrawPreviousBox()
+{
+    //brings previous selected box's size back to normal
+    if(previousSelectedBox != -1)
+    {
+        let previousX = canvas.width / 2  + (selectorGap + squareSize) * (previousSelectedBox-4) + selectorGap/2;
+                
+        //Remove old fill
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(previousX - selectedBoxSizeDiff / 2, selectorDistFromTop - selectedBoxSizeDiff / 2, squareSize + selectedBoxSizeDiff, squareSize + selectedBoxSizeDiff);
+                
+        //draw new fill on top
+        ctx.fillStyle = colors[previousSelectedBox];
+        ctx.fillRect(previousX, selectorDistFromTop, squareSize, squareSize);
+    }
+}
+
 function mouseInBox(mx, my, x1, y1, x2, y2)
 {
     return mx > x1 && mx < x2 && my > y1 && my < y2;
@@ -648,19 +665,7 @@ function playmodeStart()
     pm_colorSelected = false;
     playButton.innerHTML = "Exit Playmode"
 
-    //brings previous selected box's size back to normal
-    if(previousSelectedBox != -1)
-    {
-        let previousX = canvas.width / 2  + (selectorGap + squareSize) * (previousSelectedBox-4) + selectorGap/2;
-            
-        //Remove old fill
-        ctx.fillStyle = backgroundColor;
-        ctx.fillRect(previousX - selectedBoxSizeDiff / 2, selectorDistFromTop - selectedBoxSizeDiff / 2, squareSize + selectedBoxSizeDiff, squareSize + selectedBoxSizeDiff);
-            
-        //draw new fill on top
-        ctx.fillStyle = colors[previousSelectedBox];
-        ctx.fillRect(previousX, selectorDistFromTop, squareSize, squareSize);
-    }
+    redrawPreviousBox();
 }
 
 function clickEvent(canvas, event) {
@@ -675,19 +680,7 @@ function clickEvent(canvas, event) {
 
         let selectedBoxX = canvas.width / 2  + (selectorGap + squareSize) * (clickedBox-4) + selectorGap/2;
 
-        //brings previous selected box's size back to normal
-        if(previousSelectedBox != -1)
-        {
-            let previousX = canvas.width / 2  + (selectorGap + squareSize) * (previousSelectedBox-4) + selectorGap/2;
-            
-            //Remove old fill
-            ctx.fillStyle = backgroundColor;
-            ctx.fillRect(previousX - selectedBoxSizeDiff / 2, selectorDistFromTop - selectedBoxSizeDiff / 2, squareSize + selectedBoxSizeDiff, squareSize + selectedBoxSizeDiff);
-            
-            //draw new fill on top
-            ctx.fillStyle = colors[previousSelectedBox];
-            ctx.fillRect(previousX, selectorDistFromTop, squareSize, squareSize);
-        }
+        redrawPreviousBox();
 
         ctx.fillStyle = colors[clickedBox];
         ctx.fillRect(selectedBoxX - selectedBoxSizeDiff / 2, selectorDistFromTop - selectedBoxSizeDiff / 2, squareSize + selectedBoxSizeDiff, squareSize + selectedBoxSizeDiff);
@@ -735,15 +728,20 @@ function updateEnterPlaymodeButton()
     {
         playedplaymode.innerHTML = "Opponent played this!"
     }
+    pm_colorSelected = false;
+
+    redrawPreviousBox();
 }
 
 myTurnCheckbox.addEventListener("change", function(){
     oppTurnCheckbox.checked = !myTurnCheckbox.checked;
+    playedplaymode.disabled = true;
     updateEnterPlaymodeButton();
 });
 
 oppTurnCheckbox.addEventListener("change", function(){
     myTurnCheckbox.checked = !oppTurnCheckbox.checked;
+    playedplaymode.disabled = true;
     updateEnterPlaymodeButton();
 });
 
@@ -880,4 +878,11 @@ loadButton.addEventListener("click", function(){
 
 playButton.addEventListener("click", function(){
     playmodeStart();
+});
+
+playedplaymode.addEventListener("click", function(){
+    if(pm_colorSelected)
+    {
+
+    }
 });
